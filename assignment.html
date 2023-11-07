@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin: 20px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid black;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: rgb(0, 162, 255);
+        
+            color: black;
+        }
+
+        button {
+            padding: 5px 10px;
+            color: rgb(250, 250, 250);
+            background-color: rgb(139, 140, 143)
+        }
+    </style>
+</head>
+
+<body>
+    <h1><center>Dynamic Table</center></h1>
+    <table id="myTable">
+        <tr>
+            <th>Row number</th>
+            <th>Name</th>
+            <th>Location</th>
+            <th>CGPA</th>
+            <th>Action</th>
+        </tr>
+    </table>
+    <button onclick="addRow()">Add New</button>
+
+    <script>
+        let rowNumber = 1;
+
+        function addRow() {
+            var table = document.getElementById("myTable");
+            var newRow = table.insertRow(table.rows.length);
+            var cell1 = newRow.insertCell(0);
+            var cell2 = newRow.insertCell(1);
+            var cell3 = newRow.insertCell(2);
+            var cell4 = newRow.insertCell(3);
+            var cell5 = newRow.insertCell(4);
+
+            cell1.innerHTML = rowNumber++;
+            cell2.innerHTML = "<input type='text'>";
+            cell3.innerHTML = "<input type='text'>";
+            cell4.innerHTML = "<input type='text'>";
+            cell5.innerHTML = "<button onclick='updateRow(this)'>Update</button> <button onclick='deleteRow(this)'>Delete</button>";
+        }
+
+        function updateRow(button) {
+            var row = button.parentNode.parentNode;
+            var cells = row.getElementsByTagName("td");
+            var nameInput = cells[1].getElementsByTagName("input")[0];
+            var locationInput = cells[2].getElementsByTagName("input")[0];
+            var cgpaInput = cells[3].getElementsByTagName("input")[0];
+            var updateButton = cells[4].getElementsByTagName("button")[0];
+
+            if (updateButton.innerText === "Update") {
+                if (nameInput.value === "" || locationInput.value === "" || cgpaInput.value === "") {
+                    alert("Please fill in all fields before saving.");
+                    return;
+                }
+
+                nameInput.removeAttribute("disabled");
+                locationInput.removeAttribute("disabled");
+                cgpaInput.removeAttribute("disabled");
+                updateButton.innerText = "Save";
+            } else {
+                nameInput.setAttribute("disabled", true);
+                locationInput.setAttribute("disabled", true);
+                cgpaInput.setAttribute("disabled", true);
+                updateButton.innerText = "Update";
+            }
+        }
+
+        function deleteRow(button) {
+            var table = document.getElementById("myTable");
+            var row = button.parentNode.parentNode;
+            table.deleteRow(row.rowIndex);
+
+            // After deleting a row, update the Row numbers
+            for (let i = 1; i < table.rows.length; i++) {
+                table.rows[i].cells[0].innerHTML = i;
+            }
+        }
+    </script>
+</body>
+
+</html>
